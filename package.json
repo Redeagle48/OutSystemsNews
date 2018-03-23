@@ -4,6 +4,7 @@
   "description": "Check if there is new updates from OutSystems",
   "main": "run.js",
   "scripts": {
+    "run": "node run.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
