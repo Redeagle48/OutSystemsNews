@@ -3,11 +3,11 @@ const looksSame = require("looks-same");
 const fs = require("fs");
 const notifier = require("node-notifier");
 
-let screenshotPath = "screenshot.png",
-  baseline = "baseline.png";
+let screenshotPath = __dirname + "/screenshot.png",
+  baseline = __dirname + "/baseline.png";
 
   webshot("google.com", screenshotPath, function(err) {
-  if (!fs.existsSync(screenshotPath)) {
+  if (!fs.existsSync(baseline)) {
     fs.rename(screenshotPath, baseline, function(err) {
       if (err) throw err;
       console.log("renamed complete");
@@ -21,7 +21,19 @@ let screenshotPath = "screenshot.png",
           title: "OutSystems New Stuff!!",
           message: "Go check it out!"
         });
-      } //equal will be true, if images looks the same
+
+        //Delete actual baseline
+        //Screenshot is the new baseline
+
+      }
+      else {
+        // Object
+        notifier.notify({
+          title: "No News from OutSystems!!",
+          message: "Maybe later"
+        });
+      
+      } 
     });
   }
 });
