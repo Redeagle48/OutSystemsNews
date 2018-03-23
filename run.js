@@ -2,6 +2,7 @@ const webshot = require("webshot");
 const looksSame = require("looks-same");
 const fs = require("fs");
 const notifier = require("node-notifier");
+const openurl = require("openurl");
 
 const currDate = (function() {
     var currentdate = new Date();
@@ -23,36 +24,53 @@ function renameToBaseline() {
     });
 }
 
-function createNewBaseline() {
-    if (fs.existsSync(baseline)) {
-        fs.unlinkSync(baseline, (err) => {
+function deleteScreenShot(imageToDeletePath) {
+    if (fs.existsSync(imageToDeletePath)) {
+        fs.unlinkSync(imageToDeletePath, (err) => {
             if (err) throw err;
-            console.log(baseline + ' was deleted');
+            console.log(imageToDeletePath + ' was deleted');
         });
     }
+}
+
+function createNewBaseline() {
+    deleteScreenShot(baseline);
     renameToBaseline();
 }
 
-webshot("google.com", screenshotPath, function(err) {
+notifier.on('click', function(notifierObject, options) {
+    // Triggers if `wait: true` and user clicks notification
+    openurl.open("https://success.outsystems.com/Documentation/Whats_New");
+    createNewBaseline();
+});
+
+notifier.on('timeout', function(notifierObject, options) {
+    // Triggers if `wait: true` and notification closes
+    console.log("Cancelled");
+});
+
+webshot("https://success.outsystems.com/Documentation/Whats_New", screenshotPath, function(err) {
     if (!fs.existsSync(baseline)) {
         createNewBaseline();
         notifier.notify({
-            title: "Baseline Created",
-            message: "A new baseline was created"
+            title: 'New baseline image was created',
+            message: 'Next time we will be able to check if there\'s news!',
+            //icon: path.join(__dirname, 'coulson.jpg'), // Absolute path (doesn't work on balloons)
         });
     } else {
         looksSame(screenshotPath, baseline, function(error, equal) {
             if (!equal) {
-                createNewBaseline();
                 notifier.notify({
                     title: "OutSystems New Stuff!!",
-                    message: "Go check it out!"
+                    message: "Go check it out!",
+                    wait: true
                 });
             } else {
                 notifier.notify({
                     title: "No News from OutSystems :(",
                     message: "Maybe later"
                 });
+                deleteScreenShot(screenshotPath);
             }
         });
     }
