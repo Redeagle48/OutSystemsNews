@@ -1,0 +1,24 @@
+{
+  "name": "outsystemsnews",
+  "version": "1.0.0",
+  "description": "Check if there is new updates from OutSystems",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Redeagle48/OutSystemsNews.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Redeagle48/OutSystemsNews/issues"
+  },
+  "homepage": "https://github.com/Redeagle48/OutSystemsNews#readme",
+  "dependencies": {
+    "looks-same": "^3.3.0",
+    "node-notifier": "^5.2.1",
+    "webshot": "^0.18.0"
+  }
+}
