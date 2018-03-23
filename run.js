@@ -4,6 +4,8 @@ const fs = require("fs");
 const notifier = require("node-notifier");
 const openurl = require("openurl");
 
+const webpageToVisit = "https://success.outsystems.com/Documentation/Whats_New";
+
 const currDate = (function() {
     var currentdate = new Date();
     return currentdate.getDate() + "-" +
@@ -40,16 +42,17 @@ function createNewBaseline() {
 
 notifier.on('click', function(notifierObject, options) {
     // Triggers if `wait: true` and user clicks notification
-    openurl.open("https://success.outsystems.com/Documentation/Whats_New");
+    openurl.open(webpageToVisit);
     createNewBaseline();
 });
 
 notifier.on('timeout', function(notifierObject, options) {
     // Triggers if `wait: true` and notification closes
     console.log("Cancelled");
+    deleteScreenShot(screenshotPath);
 });
 
-webshot("https://success.outsystems.com/Documentation/Whats_New", screenshotPath, function(err) {
+webshot(webpageToVisit, screenshotPath, function(err) {
     if (!fs.existsSync(baseline)) {
         createNewBaseline();
         notifier.notify({
@@ -63,12 +66,14 @@ webshot("https://success.outsystems.com/Documentation/Whats_New", screenshotPath
                 notifier.notify({
                     title: "OutSystems New Stuff!!",
                     message: "Go check it out!",
+                    contentImage: "changes.gif",
                     wait: true
                 });
             } else {
                 notifier.notify({
                     title: "No News from OutSystems :(",
-                    message: "Maybe later"
+                    message: "Maybe later",
+                    contentImage: "noChanges.gif"
                 });
                 deleteScreenShot(screenshotPath);
             }
