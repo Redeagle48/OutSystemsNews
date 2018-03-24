@@ -3,6 +3,7 @@ const looksSame = require("looks-same");
 const fs = require("fs");
 const notifier = require("node-notifier");
 const openurl = require("openurl");
+const path = require('path');
 
 const webpageToVisit = "https://success.outsystems.com/Documentation/Whats_New";
 
@@ -64,6 +65,7 @@ webshot(webpageToVisit, screenshotPath, function(err) {
         looksSame(screenshotPath, baseline, function(error, equal) {
             if (!equal) {
                 notifier.notify({
+                    icon: path.join(__dirname, 'changesIco.jpg'),
                     title: "OutSystems New Stuff!!",
                     message: "Go check it out!",
                     contentImage: "changes.gif",
@@ -71,6 +73,7 @@ webshot(webpageToVisit, screenshotPath, function(err) {
                 });
             } else {
                 notifier.notify({
+                    icon: path.join(__dirname, 'noChangesIco.jpg'),
                     title: "No News from OutSystems :(",
                     message: "Maybe later",
                     contentImage: "noChanges.gif"
